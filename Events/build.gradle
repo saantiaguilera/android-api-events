@@ -1,0 +1,115 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: "com.jfrog.bintray"
+
+version = "1.0.1"
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 24
+        versionCode 1
+        versionName version
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+configurations {
+    javadocDeps
+}
+
+dependencies {
+    compile 'com.android.support:support-annotations:24.0.0'
+    javadocDeps 'com.android.support:support-annotations:24.0.0'
+}
+
+def siteUrl = 'https://github.com/saantiaguilera/android-api-events'
+def gitUrl = 'https://github.com/saantiaguilera/android-api-events.git'
+group = "com.saantiaguilera"
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+
+                name 'com.saantiaguilera:EventsLib'
+                description = 'EventBus'
+                url siteUrl
+
+                licenses {
+                    license {
+                        name 'MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'saantiaguilera'
+                        name 'Santiago Aguilera'
+                        email 'marquito.santi@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += configurations.javadocDeps
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+
+    failOnError false
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "com.saantiaguilera:EventsLib"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ['MIT']
+        publish = true
+        version {
+            gpg {
+                sign = true
+                passphrase = properties.getProperty("bintray.gpg.password")
+            }
+        }
+    }
+}
