@@ -20,8 +20,6 @@ public class EventBus {
 
     //Context asociated with this bus
     private WeakReference<Context> context = null;
-    //Singleton for the http bus
-    private static EventBus httpBus = null;
     //Dude in charge of dispatching events
     private final @NonNull EventDispatcher dispatcher = new EventDispatcher();
     //List of all the objects willing to receive events
