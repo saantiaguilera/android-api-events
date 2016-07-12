@@ -60,8 +60,8 @@ final class EventDispatcher {
                     poolExecutor = new ThreadPoolExecutor(
                             Runtime.getRuntime().availableProcessors() * 2,
                             Runtime.getRuntime().availableProcessors() * 2,
-                            1L,
-                            TimeUnit.MINUTES,
+                            20,
+                            TimeUnit.SECONDS,
                             new LinkedBlockingQueue<Runnable>()
                     );
                 }
