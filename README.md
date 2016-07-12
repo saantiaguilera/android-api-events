@@ -22,17 +22,7 @@ allprojects {
 In your application gradle add 
 ```Java
 dependencies {
-  compile 'com.saantiaguilera:EventsLib:1.0.3'
-}
-```
-
-Since Im still not full live in maven (because bintray hasnt added me yet to jCenter) you have to also add to your application gradle
-```Java
-repositories {
-    mavenCentral()
-    maven {
-        url  "http://dl.bintray.com/saantiaguilera/maven"
-    }
+  compile 'com.saantiaguilera:EventsLib:1.0.4'
 }
 ```
 
